@@ -8,7 +8,7 @@ Trains problem
 
 #### Using docker by itself
 1. `docker build -t trains-problem .`
-2. `docker run -it --rm --name trains-problem trains-problem ./bin/trains-problem` and run the following commands from within the container
+2. `docker run -it --rm --name trains-problem trains-problem ./bin/trains-problem`
 
 #### Directly on the host
 1. `make`
