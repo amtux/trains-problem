@@ -1,0 +1,5 @@
+version: '3'
+services:
+    trains:
+        command: /go/src/trains-problem/bin/trains-problem
+        build: .
