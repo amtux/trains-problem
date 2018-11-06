@@ -163,3 +163,17 @@ func TestGetRoutesNumExactLength(t *testing.T) {
 		t.Errorf("Expected A->C route with exact depth 4 to end up with `3` but got '%d' for graph: '%s'", sumRoutes, stringOne)
 	}
 }
+
+func TestGetShortestPath(t *testing.T) {
+	dg := Digraph{}
+	stringOne := "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7"
+	err := dg.BuildDigraphStruct(stringOne)
+	if err != nil {
+		t.Errorf("Error creating a new Digraph. Error: %s", err.Error())
+	}
+	total := dg.GetShortestPath("A", "C")
+	if total != 9 {
+		t.Errorf("Expected route A->C shortest path distance to equal 9. Found: %d", total)
+	}
+
+}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"reflect"
 	"strconv"
 	"strings"
@@ -132,36 +131,52 @@ func (dg *Digraph) GetRoutesNumExactLength(start string, end string, depth int, 
 // GetShortestPath is an attempt at apply Dijkstra on the Digraph implementation of
 // weighted directed graphs
 // This function is incomplete and needs some work to fix
-func (dg *Digraph) GetShortestPath(start string, end string) (path []string) {
+func (dg *Digraph) GetShortestPath(start string, end string) (total int) {
 
-	// create distance map
-	dist := map[string]int{}
-	nodes := []string{}
+	routesSlice := [][]string{}
+	temproute := []string{start}
+	dg.Traverse(start, end, &routesSlice, &temproute)
+	// fmt.Printf("at the finish: route contains: %v\n", routesSlice)
 
-	// set start node as 0 distance and infinity for the other nodes
-	for k := range *dg {
-		dist[k] = math.MaxInt32
-		nodes = append(nodes, k)
-	}
-	dist[start] = 0
-
-	// Go to each node from the starting vertex and discover it's neighbours
-	// For every step - keep holding queues in `path` and pop vertices if an edge with a smaller weight is discovered
-	var min int
-	var nodesIndex int
-	for len(nodes) > 0 {
-		min = math.MaxInt32
-		for k, elem := range nodes {
-			print("elem: ", elem)
-			if dist[elem] < min {
-				min = dist[elem]
-				nodesIndex = k
+	for _, a := range routesSlice {
+		for k := range a {
+			if k == len(a)-1 {
+				break
 			}
+			temptotal, _ := dg.GetWeight(a[k], a[k+1])
+			total += temptotal
 		}
-		nodes = append(nodes[:nodesIndex], nodes[nodesIndex+1:]...)
-
 	}
 	return
+}
+
+// Traverse goes through the list of possible routes from a starting point in a graph and compiles them
+// into a array of combinations arrays. This functions is not working properly and needs to be fixed
+func (dg *Digraph) Traverse(start string, end string, route *[][]string, temproute *[]string) {
+	towns := dg.GetTails(start)
+	for _, town := range towns {
+		if sliceContains(*temproute, town) {
+			// fmt.Printf("weve reached an existing town %s in temproute %+v\n", town, strings.Join(*temproute, ","))
+			// *temproute = nil
+			return
+		}
+		*temproute = append(*temproute, town)
+		if town == end {
+			// fmt.Printf("looks like we reached the end town: %s, temproute is %v\n", town, strings.Join(*temproute, ","))
+			*route = append(*route, *temproute)
+		}
+		dg.Traverse(town, end, route, temproute)
+	}
+
+}
+
+func sliceContains(nodes []string, e string) bool {
+	for _, node := range nodes {
+		if node == e {
+			return true
+		}
+	}
+	return false
 }
 
 // DumpGraph is a debug function that dumps all key/values of map []string -> []Node

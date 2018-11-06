@@ -143,14 +143,15 @@ func problemSeven(dg Digraph) (output string) {
 // 8. The length of the shortest route (in terms of distance to travel) from A
 // to C.
 func problemEight(dg Digraph) (output string) {
-	// _ = dg.CalculateShortestPath("A", "C")
-	return fmt.Sprintf("Output #8: %s", "INCOMPLETE")
+	total := dg.GetShortestPath("A", "C")
+	return fmt.Sprintf("Output #8: %d", total)
 }
 
 // 9. The length of the shortest route (in terms of distance to travel) from B
 // to B.
 func problemNine(dg Digraph) (output string) {
-	return fmt.Sprintf("Output #9: %s", "INCOMPLETE")
+	total := dg.GetShortestPath("B", "B")
+	return fmt.Sprintf("Output #9: %d", total)
 }
 
 // 10. The number of different routes from C to C with a distance of less than
